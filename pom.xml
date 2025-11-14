@@ -17,7 +17,7 @@
     <version>1.0.0</version>
 
     <name>SQL Injection Demo</name>
-    <description>Демонстрация уязвимости SQL-инъекции в Spring Boot</description>
+    <description>Demonstration vulnerability to SQL-injection in Spring Boot app</description>
 
     <properties>
         <java.version>21</java.version>

@@ -18,13 +18,13 @@ which allows attackers to execute arbitrary SQL commands.
 - Spring Boot 3.5.7
 - Spring Data JPA
 - H2 Database (in-memory)
-- Java 17
+- Java 21
 - Lombok
 
 ## Running the Application
 
 1. Make sure you have installed:
-   - Java 17 or higher
+   - Java 21 or higher
    - Maven 3.6+
 
 2. Run the application:
