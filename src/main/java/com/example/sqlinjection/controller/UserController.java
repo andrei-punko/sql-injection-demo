@@ -40,13 +40,13 @@ public class UserController {
      */
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<UserSearchResponse>> searchUser(@RequestParam String username) {
+        String query = "SELECT * FROM users WHERE username = '" + username + "'";
+
         try {
             List<User> users = vulnerableUserRepository.findByUsernameVulnerable(username);
-            String query = "SELECT * FROM users WHERE username = '" + username + "'";
             UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
-            String query = "SELECT * FROM users WHERE username = '" + username + "'";
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
         }
     }
@@ -59,13 +59,13 @@ public class UserController {
      */
     @GetMapping("/by-email")
     public ResponseEntity<ApiResponse<UserSearchResponse>> findByEmail(@RequestParam String email) {
+        String query = "SELECT * FROM users WHERE email = '" + email + "'";
+
         try {
             List<User> users = vulnerableUserRepository.findByEmailVulnerable(email);
-            String query = "SELECT * FROM users WHERE email = '" + email + "'";
             UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
-            String query = "SELECT * FROM users WHERE email = '" + email + "'";
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
         }
     }
@@ -79,12 +79,11 @@ public class UserController {
      */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody Map<String, String> credentials) {
-        try {
-            String username = credentials.get("username");
-            String password = credentials.get("password");
-            String query = "SELECT * FROM users WHERE username = '" + username +
-                    "' AND password = '" + password + "'";
+        String username = credentials.get("username");
+        String password = credentials.get("password");
+        String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
 
+        try {
             List<User> users = vulnerableUserRepository.findByUsernameAndPasswordVulnerable(username, password);
 
             if (!users.isEmpty()) {
@@ -95,8 +94,6 @@ public class UserController {
                 return ResponseEntity.ok(ApiResponse.success(loginResponse, "Invalid credentials", query));
             }
         } catch (Exception e) {
-            String query = "SELECT * FROM users WHERE username = '" + credentials.get("username") +
-                    "' AND password = '" + credentials.get("password") + "'";
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
         }
     }
@@ -109,15 +106,12 @@ public class UserController {
      */
     @GetMapping("/search-all")
     public ResponseEntity<ApiResponse<UserSearchResponse>> searchAll(@RequestParam String term) {
+        String query = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
         try {
             List<User> users = vulnerableUserRepository.searchUsersVulnerable(term);
-            String query = "SELECT * FROM users WHERE username LIKE '%" + term +
-                    "%' OR email LIKE '%" + term + "%'";
             UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
-            String query = "SELECT * FROM users WHERE username LIKE '%" + term +
-                    "%' OR email LIKE '%" + term + "%'";
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
         }
     }

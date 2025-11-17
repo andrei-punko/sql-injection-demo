@@ -50,8 +50,7 @@ public class VulnerableUserRepository {
      */
     @SuppressWarnings("unchecked")
     public List<User> findByUsernameAndPasswordVulnerable(String username, String password) {
-        String sql = "SELECT * FROM users WHERE username = '" + username +
-                "' AND password = '" + password + "'";
+        String sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
         Query query = entityManager.createNativeQuery(sql, User.class);
         return query.getResultList();
     }
@@ -61,8 +60,9 @@ public class VulnerableUserRepository {
      */
     @SuppressWarnings("unchecked")
     public List<User> searchUsersVulnerable(String searchTerm) {
-        String sql = "SELECT * FROM users WHERE username LIKE '%" + searchTerm + "%' " +
-                "OR email LIKE '%" + searchTerm + "%'";
+        String sql = "SELECT * FROM users WHERE " +
+                "username LIKE '%" + searchTerm + "%' " + "OR " +
+                "email LIKE '%" + searchTerm + "%'";
         Query query = entityManager.createNativeQuery(sql, User.class);
         return query.getResultList();
     }
