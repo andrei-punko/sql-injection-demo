@@ -1,6 +1,6 @@
-package com.example.sqlinjection.repository;
+package by.andd3dfx.sqlinjection.repository;
 
-import com.example.sqlinjection.entity.User;
+import by.andd3dfx.sqlinjection.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;

@@ -1,7 +1,7 @@
-package com.example.sqlinjection.mapper;
+package by.andd3dfx.sqlinjection.mapper;
 
-import com.example.sqlinjection.dto.UserDto;
-import com.example.sqlinjection.entity.User;
+import by.andd3dfx.sqlinjection.dto.UserDto;
+import by.andd3dfx.sqlinjection.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

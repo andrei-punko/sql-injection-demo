@@ -1,13 +1,13 @@
-package com.example.sqlinjection.controller;
+package by.andd3dfx.sqlinjection.controller;
 
-import com.example.sqlinjection.dto.ApiResponse;
-import com.example.sqlinjection.dto.LoginResponse;
-import com.example.sqlinjection.dto.UserDto;
-import com.example.sqlinjection.dto.UserSearchResponse;
-import com.example.sqlinjection.entity.User;
-import com.example.sqlinjection.mapper.UserMapper;
-import com.example.sqlinjection.repository.UserRepository;
-import com.example.sqlinjection.repository.VulnerableUserRepository;
+import by.andd3dfx.sqlinjection.dto.ApiResponse;
+import by.andd3dfx.sqlinjection.dto.LoginResponse;
+import by.andd3dfx.sqlinjection.dto.UserDto;
+import by.andd3dfx.sqlinjection.dto.UserSearchResponse;
+import by.andd3dfx.sqlinjection.entity.User;
+import by.andd3dfx.sqlinjection.mapper.UserMapper;
+import by.andd3dfx.sqlinjection.repository.UserRepository;
+import by.andd3dfx.sqlinjection.repository.VulnerableUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

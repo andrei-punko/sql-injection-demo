@@ -1,4 +1,4 @@
-package com.example.sqlinjection.dto;
+package by.andd3dfx.sqlinjection.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
