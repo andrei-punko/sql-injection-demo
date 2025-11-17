@@ -61,7 +61,7 @@ public class VulnerableUserRepository {
     @SuppressWarnings("unchecked")
     public List<User> searchUsersVulnerable(String searchTerm) {
         String sql = "SELECT * FROM users WHERE " +
-                "username LIKE '%" + searchTerm + "%' " + "OR " +
+                "username LIKE '%" + searchTerm + "%' OR " +
                 "email LIKE '%" + searchTerm + "%'";
         Query query = entityManager.createNativeQuery(sql, User.class);
         return query.getResultList();
