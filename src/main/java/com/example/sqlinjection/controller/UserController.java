@@ -44,7 +44,7 @@ public class UserController {
 
         try {
             List<User> users = vulnerableUserRepository.findByUsernameVulnerable(username);
-            UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
+            UserSearchResponse data = new UserSearchResponse(users.size(), users);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
@@ -63,7 +63,7 @@ public class UserController {
 
         try {
             List<User> users = vulnerableUserRepository.findByEmailVulnerable(email);
-            UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
+            UserSearchResponse data = new UserSearchResponse(users.size(), users);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
@@ -87,10 +87,10 @@ public class UserController {
             List<User> users = vulnerableUserRepository.findByUsernameAndPasswordVulnerable(username, password);
 
             if (!users.isEmpty()) {
-                LoginResponse loginResponse = new LoginResponse(users.get(0), "Authentication successful", query);
+                LoginResponse loginResponse = new LoginResponse(users.get(0), "Authentication successful");
                 return ResponseEntity.ok(ApiResponse.success(loginResponse, "Authentication successful", query));
             } else {
-                LoginResponse loginResponse = new LoginResponse(null, "Invalid credentials", query);
+                LoginResponse loginResponse = new LoginResponse(null, "Invalid credentials");
                 return ResponseEntity.ok(ApiResponse.success(loginResponse, "Invalid credentials", query));
             }
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class UserController {
         String query = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
         try {
             List<User> users = vulnerableUserRepository.searchUsersVulnerable(term);
-            UserSearchResponse data = new UserSearchResponse(users.size(), users, query);
+            UserSearchResponse data = new UserSearchResponse(users.size(), users);
             return ResponseEntity.ok(ApiResponse.success(data, null, query));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage(), query));
@@ -123,7 +123,7 @@ public class UserController {
     public ResponseEntity<ApiResponse<UserSearchResponse>> findUserSafe(@PathVariable String username) {
         try {
             List<User> users = userRepository.findByUsername(username);
-            UserSearchResponse data = new UserSearchResponse(users.size(), users, null);
+            UserSearchResponse data = new UserSearchResponse(users.size(), users);
             return ResponseEntity.ok(ApiResponse.success(data, 
                     "This method uses parameterized queries and is protected from SQL injection", null));
         } catch (Exception e) {

@@ -11,8 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSearchResponse {
+
     private int count;
     private List<User> users;
-    private String query;
 }
-

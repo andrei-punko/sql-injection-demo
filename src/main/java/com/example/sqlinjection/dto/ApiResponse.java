@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApiResponse<T> {
+
     private boolean success;
     private String message;
     private T data;
@@ -34,4 +35,3 @@ public class ApiResponse<T> {
         return new ApiResponse<>(false, null, null, error, query);
     }
 }
-
