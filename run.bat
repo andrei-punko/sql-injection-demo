@@ -1,46 +1,46 @@
 @echo off
 chcp 65001 >nul
 echo ========================================
-echo   SQL Injection Demo - Запуск сервиса
+echo   SQL Injection Demo - Starting Service
 echo ========================================
 echo.
 
-REM Проверка наличия Maven
+REM Check if Maven is available
 where mvn >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo [ОШИБКА] Maven не найден в PATH!
-    echo Убедитесь, что Maven установлен и добавлен в переменную окружения PATH.
+    echo [ERROR] Maven not found in PATH!
+    echo Make sure Maven is installed and added to the PATH environment variable.
     echo.
     pause
     exit /b 1
 )
 
-REM Проверка наличия Java
+REM Check if Java is available
 where java >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo [ОШИБКА] Java не найдена в PATH!
-    echo Убедитесь, что Java установлена и добавлена в переменную окружения PATH.
+    echo [ERROR] Java not found in PATH!
+    echo Make sure Java is installed and added to the PATH environment variable.
     echo.
     pause
     exit /b 1
 )
 
-echo [INFO] Проверка версии Java...
+echo [INFO] Checking Java version...
 java -version
 echo.
 
-echo [INFO] Запуск Spring Boot приложения...
-echo [INFO] Сервис будет доступен по адресу: http://localhost:8080
-echo [INFO] H2 Console будет доступна по адресу: http://localhost:8080/h2-console
+echo [INFO] Starting Spring Boot application...
+echo [INFO] Service will be available at: http://localhost:8080
+echo [INFO] H2 Console will be available at: http://localhost:8080/h2-console
 echo.
-echo Для остановки сервиса нажмите Ctrl+C
+echo Press Ctrl+C to stop the service
 echo.
 
 mvn spring-boot:run
 
 if %ERRORLEVEL% NEQ 0 (
     echo.
-    echo [ОШИБКА] Не удалось запустить приложение!
+    echo [ERROR] Failed to start the application!
     pause
     exit /b 1
 )

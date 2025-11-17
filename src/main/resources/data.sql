@@ -1,4 +1,4 @@
--- Инициализация тестовых данных
+-- Initialize test data
 INSERT INTO users (id, username, email, password, role) VALUES 
 (1, 'admin', 'admin@example.com', 'admin123', 'ADMIN'),
 (2, 'user1', 'user1@example.com', 'password1', 'USER'),
