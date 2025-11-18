@@ -62,19 +62,19 @@ run.bat
    Body: {"username": "...", "password": "..."}
    ```
 
-4. **Search users**
+4. **Search users by term (username/email)**
    ```
    GET /api/users/by-term?term={searchTerm}
    ```
 
 ### Safe endpoint (for comparison):
 
-5. **Safe search**
+1. **Safe search by username**
    ```
    GET /api/users/safe/{username}
    ```
 
-6. **Get all users**
+2. **Get all users entities (directly from DB, with `password` field)**
    ```
    GET /api/users/all
    ```
@@ -126,7 +126,7 @@ curl -X POST http://localhost:8080/api/users/login \
 
 **Expected result:** Successful authentication with correct credentials
 
-### Example 4: Search users (normal request)
+### Example 4: Search users by term (normal request)
 
 **Request:**
 ```bash
@@ -144,14 +144,14 @@ curl "http://localhost:8080/api/users/safe/admin"
 
 **Expected result:** Returns user using safe method (parameterized queries)
 
-### Example 6: Get all users
+### Example 6: Get all users entities
 
 **Request:**
 ```bash
 curl "http://localhost:8080/api/users/all"
 ```
 
-**Expected result:** Returns a list of all users in the database
+**Expected result:** Returns a list of all users entities in the database
 
 ## SQL Injection Examples
 
@@ -225,7 +225,7 @@ The `VulnerableUserRepository.java` file uses unsafe SQL construction methods:
 ```java
 String sql = "SELECT * FROM users WHERE username = '" + username + "'";
 
-String sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
+String sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
 ```
 
 User input is directly inserted into SQL queries without validation and escaping.
