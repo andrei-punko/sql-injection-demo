@@ -50,6 +50,38 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
+    void findByUsername_OR_1eq1() {
+        mockMvc.perform(get("/api/users/by-username").param("username", "admin' OR '1'='1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
+
+        mockMvc.perform(get("/api/users/by-username").param("username", "' OR '1'='1'--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
+    }
+
+    @Test
+    @SneakyThrows
+    void findByUsername_UNION() {
+        mockMvc.perform(get("/api/users/by-username").param("username", "' UNION SELECT * FROM users--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5))
+                .andExpect(jsonPath("$.data[0].username").value("admin"))
+                .andExpect(jsonPath("$.data[0].password").doesNotExist());
+
+        mockMvc.perform(get("/api/users/by-username").param("username",
+                        "' UNION SELECT u.ID, u.USERNAME, u.PASSWORD as EMAIL, u.PASSWORD, u.ROLE FROM users u--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5))
+                .andExpect(jsonPath("$.data[0].id").value("1"))
+                .andExpect(jsonPath("$.data[0].username").value("ADMIN"))
+                .andExpect(jsonPath("$.data[0].password").doesNotExist())
+                .andExpect(jsonPath("$.data[0].email").value("admin"))
+                .andExpect(jsonPath("$.data[0].role").value("admin123"));
+    }
+
+    @Test
+    @SneakyThrows
     void findByEmail() {
         mockMvc.perform(get("/api/users/by-email").param("email", "john@example.com"))
                 .andExpect(status().isOk())
@@ -59,6 +91,18 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.data[0].password").doesNotExist())
                 .andExpect(jsonPath("$.data[0].email").value("john@example.com"))
                 .andExpect(jsonPath("$.data[0].role").value("USER"));
+    }
+
+    @Test
+    @SneakyThrows
+    void findByEmail_OR_1eq1() {
+        mockMvc.perform(get("/api/users/by-email").param("email", "admin@example.com' OR '1'='1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
+
+        mockMvc.perform(get("/api/users/by-email").param("email", "' OR '1'='1'--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
     }
 
     @Test
@@ -73,7 +117,23 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void searchAll() {
+    void login_OR_1eq1() {
+        mockMvc.perform(post("/api/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\": \"user1\", \"password\": \"' OR '1'='1\"}")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("SUCCESS"));
+
+        mockMvc.perform(post("/api/users/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\": \"any' OR '1'='1'--\", \"password\": \"Karapuzik\"}")
+                ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.status").value("SUCCESS"));
+    }
+
+    @Test
+    @SneakyThrows
+    void findByTerm() {
         mockMvc.perform(get("/api/users/by-term").param("term", "admin"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.length()").value(1))
@@ -82,6 +142,18 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.data[0].password").doesNotExist())
                 .andExpect(jsonPath("$.data[0].email").value("admin@example.com"))
                 .andExpect(jsonPath("$.data[0].role").value("ADMIN"));
+    }
+
+    @Test
+    @SneakyThrows
+    void findByTerm_OR_1eq1() {
+        mockMvc.perform(get("/api/users/by-term").param("term", "admin' OR '1'='1'--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
+
+        mockMvc.perform(get("/api/users/by-term").param("term", "' OR '1'='1'--"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.length()").value(5));
     }
 
     @Test
