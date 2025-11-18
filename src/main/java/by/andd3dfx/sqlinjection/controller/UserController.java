@@ -34,11 +34,11 @@ public class UserController {
      * VULNERABLE ENDPOINT: Search user by username
      * <p>
      * Attack examples:
-     * GET /api/users/search?username=admin' OR '1'='1
-     * GET /api/users/search?username=admin'--
-     * GET /api/users/search?username=' OR '1'='1'--
+     * GET /api/users/by-username?username=admin' OR '1'='1
+     * GET /api/users/by-username?username=admin'--
+     * GET /api/users/by-username?username=' OR '1'='1'--
      */
-    @GetMapping("/search")
+    @GetMapping("/by-username")
     public ApiResponse<List<UserDto>> findByUsername(@RequestParam String username) {
         String query = "SELECT * FROM users WHERE username = '" + username + "'";
 
@@ -70,7 +70,7 @@ public class UserController {
      * Body: {"username": "admin", "password": "' OR '1'='1"}
      */
     @PostMapping("/login")
-    public ApiResponse<String> login(@RequestBody Map<String, String> credentials) {
+    public ApiResponse<Map<String, String>> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
         String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
@@ -79,16 +79,16 @@ public class UserController {
         List<UserDto> usersDto = userMapper.toDto(users);
 
         var status = usersDto.isEmpty() ? "FAIL" : "SUCCESS";
-        return new ApiResponse<>(status, query);
+        return new ApiResponse<>(Map.of("status", status), query);
     }
 
     /**
      * VULNERABLE ENDPOINT: Search users
      * <p>
      * Attack examples:
-     * GET /api/users/search-all?term=admin' OR '1'='1'--
+     * GET /api/users/by-term?term=admin' OR '1'='1'--
      */
-    @GetMapping("/search-all")
+    @GetMapping("/by-term")
     public ApiResponse<List<UserDto>> searchAll(@RequestParam String term) {
         String query = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
 
@@ -101,7 +101,7 @@ public class UserController {
      * SAFE ENDPOINT: For comparison with vulnerable method
      */
     @GetMapping("/safe/{username}")
-    public List<UserDto> findUserSafe(@PathVariable String username) {
+    public List<UserDto> findByUsernameSafe(@PathVariable String username) {
         List<User> users = userRepository.findByUsername(username);
         return userMapper.toDto(users);
     }
@@ -110,7 +110,7 @@ public class UserController {
      * Get all users (for testing)
      */
     @GetMapping("/all")
-    public List<User> getAllUsers() {
+    public List<User> getAllUserEntities() {
         return userRepository.findAll();
     }
 }

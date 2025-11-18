@@ -47,7 +47,7 @@ run.bat
 
 1. **Search user by username**
    ```
-   GET /api/users/search?username={username}
+   GET /api/users/by-username?username={username}
    ```
 
 2. **Search user by email**
@@ -64,7 +64,7 @@ run.bat
 
 4. **Search users**
    ```
-   GET /api/users/search-all?term={searchTerm}
+   GET /api/users/by-term?term={searchTerm}
    ```
 
 ### Safe endpoint (for comparison):
@@ -85,7 +85,7 @@ run.bat
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/search?username=admin"
+curl "http://localhost:8080/api/users/by-username?username=admin"
 ```
 
 **Expected result:** Returns user with username "admin"
@@ -130,7 +130,7 @@ curl -X POST http://localhost:8080/api/users/login \
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/search-all?term=john"
+curl "http://localhost:8080/api/users/by-term?term=john"
 ```
 
 **Expected result:** Returns users whose username or email contains "john"
@@ -188,7 +188,7 @@ curl -X POST http://localhost:8080/api/users/login \
 
 **Request:**
 ```bash
-curl "http://localhost:8080/api/users/search-all?term=' OR '1'='1'--"
+curl "http://localhost:8080/api/users/by-term?term=' OR '1'='1'--"
 ```
 
 **Result:** Returns all users regardless of the search query
