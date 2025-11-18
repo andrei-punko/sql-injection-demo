@@ -93,10 +93,7 @@ curl "http://localhost:8080/api/users/search?username=admin"
 **Example response:**
 ```json
 {
-  "success": true,
-  "message": null,
   "data": {
-    "count": 1,
     "users": [
       {
         "id": 1,
@@ -105,10 +102,8 @@ curl "http://localhost:8080/api/users/search?username=admin"
         "password": "admin123",
         "role": "ADMIN"
       }
-    ],
-    "query": "SELECT * FROM users WHERE username = 'admin'"
+    ]
   },
-  "error": null,
   "query": "SELECT * FROM users WHERE username = 'admin'"
 }
 ```

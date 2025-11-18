@@ -59,12 +59,9 @@ public class VulnerableUserRepository {
      * VULNERABLE METHOD: Search with LIKE and concatenation
      */
     @SuppressWarnings("unchecked")
-    public List<User> searchUsersVulnerable(String searchTerm) {
-        String sql = "SELECT * FROM users WHERE " +
-                "username LIKE '%" + searchTerm + "%' OR " +
-                "email LIKE '%" + searchTerm + "%'";
+    public List<User> searchUsersVulnerable(String term) {
+        String sql = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
         Query query = entityManager.createNativeQuery(sql, User.class);
         return query.getResultList();
     }
 }
-

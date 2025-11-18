@@ -1,9 +1,7 @@
 package by.andd3dfx.sqlinjection.controller;
 
 import by.andd3dfx.sqlinjection.dto.ApiResponse;
-import by.andd3dfx.sqlinjection.dto.LoginResponse;
 import by.andd3dfx.sqlinjection.dto.UserDto;
-import by.andd3dfx.sqlinjection.dto.UserSearchResponse;
 import by.andd3dfx.sqlinjection.entity.User;
 import by.andd3dfx.sqlinjection.mapper.UserMapper;
 import by.andd3dfx.sqlinjection.repository.UserRepository;
@@ -41,13 +39,12 @@ public class UserController {
      * GET /api/users/search?username=' OR '1'='1'--
      */
     @GetMapping("/search")
-    public ApiResponse<UserSearchResponse> searchUser(@RequestParam String username) {
+    public ApiResponse<List<UserDto>> findByUsername(@RequestParam String username) {
         String query = "SELECT * FROM users WHERE username = '" + username + "'";
 
         List<User> users = vulnerableUserRepository.findByUsernameVulnerable(username);
         List<UserDto> usersDto = userMapper.toDto(users);
-        UserSearchResponse response = new UserSearchResponse(usersDto.size(), usersDto);
-        return ApiResponse.success(response, null, query);
+        return new ApiResponse<>(usersDto, query);
     }
 
     /**
@@ -57,14 +54,12 @@ public class UserController {
      * GET /api/users/by-email?email=admin@example.com' OR '1'='1
      */
     @GetMapping("/by-email")
-    public ApiResponse<UserSearchResponse> findByEmail(@RequestParam String email) {
+    public ApiResponse<List<UserDto>> findByEmail(@RequestParam String email) {
         String query = "SELECT * FROM users WHERE email = '" + email + "'";
-
 
         List<User> users = vulnerableUserRepository.findByEmailVulnerable(email);
         List<UserDto> usersDto = userMapper.toDto(users);
-        UserSearchResponse response = new UserSearchResponse(users.size(), usersDto);
-        return ApiResponse.success(response, null, query);
+        return new ApiResponse<>(usersDto, query);
     }
 
     /**
@@ -75,22 +70,16 @@ public class UserController {
      * Body: {"username": "admin", "password": "' OR '1'='1"}
      */
     @PostMapping("/login")
-    public ApiResponse<LoginResponse> login(@RequestBody Map<String, String> credentials) {
+    public ApiResponse<String> login(@RequestBody Map<String, String> credentials) {
         String username = credentials.get("username");
         String password = credentials.get("password");
         String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "'";
 
-
         List<User> users = vulnerableUserRepository.findByUsernameAndPasswordVulnerable(username, password);
         List<UserDto> usersDto = userMapper.toDto(users);
 
-        if (!users.isEmpty()) {
-            LoginResponse loginResponse = new LoginResponse(usersDto.get(0), "Authentication successful");
-            return ApiResponse.success(loginResponse, "Authentication successful", query);
-        }
-
-        LoginResponse loginResponse = new LoginResponse(null, "Invalid credentials");
-        return ApiResponse.success(loginResponse, "Invalid credentials", query);
+        var status = usersDto.isEmpty() ? "FAIL" : "SUCCESS";
+        return new ApiResponse<>(status, query);
     }
 
     /**
@@ -100,24 +89,21 @@ public class UserController {
      * GET /api/users/search-all?term=admin' OR '1'='1'--
      */
     @GetMapping("/search-all")
-    public ApiResponse<UserSearchResponse> searchAll(@RequestParam String term) {
+    public ApiResponse<List<UserDto>> searchAll(@RequestParam String term) {
         String query = "SELECT * FROM users WHERE username LIKE '%" + term + "%' OR email LIKE '%" + term + "%'";
 
         List<User> users = vulnerableUserRepository.searchUsersVulnerable(term);
         List<UserDto> usersDto = userMapper.toDto(users);
-        UserSearchResponse data = new UserSearchResponse(usersDto.size(), usersDto);
-        return ApiResponse.success(data, null, query);
+        return new ApiResponse<>(usersDto, query);
     }
 
     /**
      * SAFE ENDPOINT: For comparison with vulnerable method
      */
     @GetMapping("/safe/{username}")
-    public ApiResponse<UserSearchResponse> findUserSafe(@PathVariable String username) {
+    public List<UserDto> findUserSafe(@PathVariable String username) {
         List<User> users = userRepository.findByUsername(username);
-        List<UserDto> usersDto = userMapper.toDto(users);
-        UserSearchResponse data = new UserSearchResponse(usersDto.size(), usersDto);
-        return ApiResponse.success(data, "This method uses parameterized queries and is protected from SQL injection", null);
+        return userMapper.toDto(users);
     }
 
     /**
