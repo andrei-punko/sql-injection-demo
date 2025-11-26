@@ -1,0 +1,152 @@
+{
+	"info": {
+		"_postman_id": "a5459d18-017b-4a21-9991-5edf27873dba",
+		"name": "SQL injection demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1701433"
+	},
+	"item": [
+		{
+			"name": "/api/users/all (Entities)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/api/users/all",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/safe/{username}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/api/users/safe/admin",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"safe",
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/by-username",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/api/users/by-username?username=admin",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"by-username"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/by-email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/api/users/by-email?email=user1@example.com",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"by-email"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "user1@example.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/by-term",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{service-url}}/api/users/by-term?term=ser",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"by-term"
+					],
+					"query": [
+						{
+							"key": "term",
+							"value": "ser"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"user2\", \"password\": \"password2\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{service-url}}/api/users/login",
+					"host": [
+						"{{service-url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
