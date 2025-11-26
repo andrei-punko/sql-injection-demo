@@ -134,14 +134,19 @@ class UserControllerTest {
     @Test
     @SneakyThrows
     void findByTerm() {
-        mockMvc.perform(get("/api/users/by-term").param("term", "admin"))
+        mockMvc.perform(get("/api/users/by-term").param("term", "ser"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.length()").value(1))
-                .andExpect(jsonPath("$.data[0].id").value(1))
-                .andExpect(jsonPath("$.data[0].username").value("admin"))
+                .andExpect(jsonPath("$.data.length()").value(2))
+                .andExpect(jsonPath("$.data[0].id").value(2))
+                .andExpect(jsonPath("$.data[0].username").value("user1"))
                 .andExpect(jsonPath("$.data[0].password").doesNotExist())
-                .andExpect(jsonPath("$.data[0].email").value("admin@example.com"))
-                .andExpect(jsonPath("$.data[0].role").value("ADMIN"));
+                .andExpect(jsonPath("$.data[0].email").value("user1@example.com"))
+                .andExpect(jsonPath("$.data[0].role").value("USER"))
+                .andExpect(jsonPath("$.data[1].id").value(3))
+                .andExpect(jsonPath("$.data[1].username").value("user2"))
+                .andExpect(jsonPath("$.data[1].password").doesNotExist())
+                .andExpect(jsonPath("$.data[1].email").value("user2@example.com"))
+                .andExpect(jsonPath("$.data[1].role").value("USER"));
     }
 
     @Test
@@ -180,7 +185,7 @@ class UserControllerTest {
 
     @Test
     @SneakyThrows
-    void getAllUsers() {
+    void getAllUserEntities() {
         mockMvc.perform(get("/api/users/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(5))
