@@ -1,6 +1,7 @@
 # SQL Injection Demo - Spring Boot
 
 ![Java CI with Maven](https://github.com/andrei-punko/sql-injection-demo/workflows/Java%20CI%20with%20Maven/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A demonstration Spring Boot project showing SQL injection vulnerability.
 
